@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\UserRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
@@ -74,5 +75,26 @@ class AuthController extends Controller
         } else {
             return response()->json(['error' => 'Invalid session'], Response::HTTP_UNAUTHORIZED);
         }
+    }
+
+    public function update(UserRequest $request)
+    {
+        $user = User::find(Auth::id());
+
+        $userData = [
+            'name' => $request->input('name'),
+            'email' => $request->input('email'),
+        ];
+
+        if (!empty($request->input('password'))) {
+            $userData['password'] = bcrypt($request->input('password'));
+        }
+
+        $user->update($userData);
+
+        return response()->json([
+            'message' => 'Your details updated',
+            'user' => $user,
+        ], Response::HTTP_OK);
     }
 }

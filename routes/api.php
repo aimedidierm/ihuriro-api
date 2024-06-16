@@ -1,7 +1,14 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\DashboardSettingController;
+use App\Http\Controllers\LawUsersController;
+use App\Http\Controllers\ReportedController;
+use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\SurveyController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -25,6 +32,17 @@ Route::get('/', function () {
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
 
+Route::group(
+    ["prefix" => "account", "middleware" => "auth:api", "as" => "account."],
+    function () {
+        Route::put('/settings', [AuthController::class, 'update']);
+        Route::get('/settings', function () {
+            return response()->json([
+                'user' => Auth::user(),
+            ], Response::HTTP_OK);
+        });
+    }
+);
 
 Route::group(["prefix" => "user", "middleware" => ["auth:api", "isUser"], "as" => "user."], function () {
     Route::get('/', function () {
@@ -39,7 +57,11 @@ Route::group(["prefix" => "law", "middleware" => ["auth:api", "isLaw"], "as" => 
 });
 
 Route::group(["prefix" => "government", "middleware" => ["auth:api", "isGovernment"], "as" => "government."], function () {
-    Route::get('/', function () {
-        return response()->json('Welcome Government');
-    });
+    Route::get('/', [DashboardController::class, 'governmentDashboard']);
+    Route::get('/settings', [DashboardSettingController::class, 'create']);
+    Route::put('/settings/{id}', [DashboardSettingController::class, 'update']);
+    Route::apiResource('/resources', ResourceController::class)->only('index', 'store', 'destroy');
+    Route::apiResource('/surveys', SurveyController::class)->only('index');
+    Route::apiResource('/reported', ReportedController::class)->only('index');
+    Route::apiResource('/law-users', LawUsersController::class)->only('index', 'store', 'destroy');
 });

@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Resource extends Model
+class DashboardSetting extends Model
 {
     use HasFactory;
 
@@ -15,8 +15,9 @@ class Resource extends Model
      * @var array<int, string>
      */
     protected $fillable = [
-        'title',
-        'summary',
-        'description',
+        'option_1',
+        'option_2',
+        'option_3',
+        'option_4',
     ];
 }

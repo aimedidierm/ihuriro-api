@@ -2,8 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ResourceRequest;
 use App\Models\Resource;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 class ResourceController extends Controller
 {
@@ -12,54 +14,45 @@ class ResourceController extends Controller
      */
     public function index()
     {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
-    {
-        //
+        $resources = Resource::get();
+        return response()->json([
+            'resources' => $resources
+        ], Response::HTTP_OK);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ResourceRequest $request)
     {
-        //
-    }
+        $resource = Resource::create([
+            'title' => $request->input('title'),
+            'summary' => $request->input('summary'),
+            'description' => $request->input('description'),
+        ]);
 
-    /**
-     * Display the specified resource.
-     */
-    public function show(Resource $resource)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit(Resource $resource)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, Resource $resource)
-    {
-        //
+        return response()->json([
+            'message' => 'Resource created',
+            'resource' => $resource,
+        ], Response::HTTP_OK);
     }
 
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(Resource $resource)
+    public function destroy(string $id)
     {
-        //
+        $resource = Resource::find($id);
+
+        if ($resource) {
+            $resource->delete();
+            return response()->json([
+                'message' => 'Resource deleted',
+            ], Response::HTTP_OK);
+        } else {
+            return response()->json([
+                'message' => 'Resource not found',
+            ], Response::HTTP_NOT_FOUND);
+        }
     }
 }

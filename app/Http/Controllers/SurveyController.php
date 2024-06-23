@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Question;
 use App\Models\Survey;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -50,5 +51,13 @@ class SurveyController extends Controller
     public function destroy(Survey $survey)
     {
         //
+    }
+
+    public function questionsList()
+    {
+        $questions = Question::all();
+        return response()->json([
+            'questions' => $questions
+        ], Response::HTTP_OK);
     }
 }

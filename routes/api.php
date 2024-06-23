@@ -41,6 +41,7 @@ Route::group(
                 'user' => Auth::user(),
             ], Response::HTTP_OK);
         });
+        Route::get('/questions', [SurveyController::class, 'questionsList']);
     }
 );
 

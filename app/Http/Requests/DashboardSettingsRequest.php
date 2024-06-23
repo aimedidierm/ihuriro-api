@@ -22,10 +22,10 @@ class DashboardSettingsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'option_1' => 'required|boolean',
-            'option_2' => 'required|boolean',
-            'option_3' => 'required|boolean',
-            'option_4' => 'required|boolean',
+            'option_1' => 'required',
+            'option_2' => 'required',
+            'option_3' => 'required',
+            'option_4' => 'required',
         ];
     }
 }

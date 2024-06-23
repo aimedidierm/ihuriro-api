@@ -37,11 +37,29 @@ class DashboardSettingController extends Controller
         $dashboardDetails = DashboardSetting::find($id);
 
         if ($dashboardDetails) {
+            $option1 = false;
+            $option2 = false;
+            $option3 = false;
+            $option4 = false;
+
+            if ($request->input('option_1') === "true") {
+                $option1 = true;
+            }
+            if ($request->input('option_2') === "true") {
+                $option2 = true;
+            }
+            if ($request->input('option_3') === "true") {
+                $option3 = true;
+            }
+            if ($request->input('option_4') === "true") {
+                $option4 = true;
+            }
+
             $dashboardDetails->update([
-                'option_1' => $request->input('option_1'),
-                'option_2' => $request->input('option_2'),
-                'option_3' => $request->input('option_3'),
-                'option_4' => $request->input('option_4'),
+                'option_1' => $option1,
+                'option_2' => $option2,
+                'option_3' => $option3,
+                'option_4' => $option4,
             ]);
 
             return response()->json([

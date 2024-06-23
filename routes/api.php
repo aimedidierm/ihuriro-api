@@ -4,10 +4,10 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\DashboardSettingController;
 use App\Http\Controllers\LawUsersController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportedController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SurveyController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -64,4 +64,11 @@ Route::group(["prefix" => "government", "middleware" => ["auth:api", "isGovernme
     Route::apiResource('/surveys', SurveyController::class)->only('index');
     Route::apiResource('/reported', ReportedController::class)->only('index');
     Route::apiResource('/law-users', LawUsersController::class)->only('index', 'store', 'destroy');
+});
+
+Route::group(["prefix" => "chat", "middleware" => "auth:api"], function () {
+    //listing unread messages
+    //listing messages in chat room
+    Route::apiResource('/message', MessageController::class)->only('index', 'store');
+    //send message
 });

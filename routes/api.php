@@ -8,6 +8,7 @@ use App\Http\Controllers\MessageController;
 use App\Http\Controllers\ReportedController;
 use App\Http\Controllers\ResourceController;
 use App\Http\Controllers\SurveyController;
+use App\Http\Controllers\UserController;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Symfony\Component\HttpFoundation\Response;
@@ -31,6 +32,8 @@ Route::get('/', function () {
 
 Route::post('/login', [AuthController::class, 'login'])->name('login');
 Route::get('/logout', [AuthController::class, 'logout'])->name('logout');
+Route::post('/register', [UserController::class, 'store']);
+Route::post('/report', [ReportedController::class, 'annonymous']);
 
 Route::group(
     ["prefix" => "account", "middleware" => "auth:api", "as" => "account."],
@@ -46,9 +49,12 @@ Route::group(
 );
 
 Route::group(["prefix" => "user", "middleware" => ["auth:api", "isUser"], "as" => "user."], function () {
-    Route::get('/', function () {
-        return response()->json('Welcome User');
-    });
+    Route::get('/', [DashboardController::class, 'userDashboard']);
+    Route::get('/settings', [DashboardSettingController::class, 'create']);
+    Route::put('/settings/{id}', [DashboardSettingController::class, 'update']);
+    Route::apiResource('/reported', ReportedController::class)->only('index', 'store');
+    Route::apiResource('/resources', ResourceController::class)->only('index');
+    Route::apiResource('/surveys', SurveyController::class)->only('index', 'store');
 });
 
 Route::group(["prefix" => "law", "middleware" => ["auth:api", "isLaw"], "as" => "law."], function () {

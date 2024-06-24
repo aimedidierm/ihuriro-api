@@ -44,4 +44,8 @@ class DashboardController extends Controller
         //     'unread' => $unread,
         // ], Response::HTTP_OK);
     }
+
+    public function userDashboard()
+    {
+    }
 }

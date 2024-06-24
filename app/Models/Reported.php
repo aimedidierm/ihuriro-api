@@ -9,6 +9,20 @@ class Reported extends Model
 {
     use HasFactory;
 
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'title',
+        'description',
+        'location',
+        'type',
+        'status',
+        'user_id',
+    ];
+
     public function user()
     {
         return $this->belongsTo(User::class);

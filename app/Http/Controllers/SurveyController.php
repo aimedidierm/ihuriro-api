@@ -2,9 +2,12 @@
 
 namespace App\Http\Controllers;
 
+use App\Enums\UserRole;
+use App\Http\Requests\SurveyRequest;
 use App\Models\Question;
 use App\Models\Survey;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Symfony\Component\HttpFoundation\Response;
 
 class SurveyController extends Controller
@@ -14,19 +17,41 @@ class SurveyController extends Controller
      */
     public function index()
     {
-        $surveys = Survey::all();
-        $surveys->load('user');
-        return response()->json([
-            'surveys' => $surveys
-        ], Response::HTTP_OK);
+        if (Auth::user()->role == UserRole::USER->value) {
+            $surveys = Survey::where('user_id', Auth::id())->get();
+            $surveys->load('user');
+            return response()->json([
+                'surveys' => $surveys
+            ], Response::HTTP_OK);
+        } else {
+            $surveys = Survey::all();
+            $surveys->load('user');
+            return response()->json([
+                'surveys' => $surveys
+            ], Response::HTTP_OK);
+        }
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(SurveyRequest $request)
     {
-        //
+        $survey = Survey::create([
+            'q1' => $request->input('q1'),
+            'q2' => $request->input('q2'),
+            'q3' => $request->input('q3'),
+            'q4' => $request->input('q4'),
+            'q5' => $request->input('q5'),
+            'q6' => $request->input('q6'),
+            'q7' => $request->input('q7'),
+            'user_id' => Auth::id(),
+        ]);
+
+        return response()->json([
+            'message' => 'Survey created',
+            'survey' => $survey,
+        ], Response::HTTP_OK);
     }
 
     /**

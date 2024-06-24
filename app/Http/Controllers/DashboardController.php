@@ -13,7 +13,6 @@ class DashboardController extends Controller
 {
     public function governmentDashboard()
     {
-
         $reported = Reported::get()->count();
         $reports = $reported;
         $surveys = Survey::get()->count();
@@ -27,5 +26,22 @@ class DashboardController extends Controller
             'surveys' => $surveys,
             'unread' => $unread,
         ], Response::HTTP_OK);
+    }
+
+    public function lawDashboard()
+    {
+        // $reported = Reported::get()->count();
+        // $reports = $reported;
+        // $surveys = Survey::get()->count();
+        // $unread = MessageUser::where('is_read', false)
+        //     ->where('user_id', Auth::id())
+        //     ->get()->count();
+
+        // return response()->json([
+        //     'reports' => $reports,
+        //     'reported' => $reported,
+        //     'surveys' => $surveys,
+        //     'unread' => $unread,
+        // ], Response::HTTP_OK);
     }
 }

@@ -52,9 +52,11 @@ Route::group(["prefix" => "user", "middleware" => ["auth:api", "isUser"], "as" =
 });
 
 Route::group(["prefix" => "law", "middleware" => ["auth:api", "isLaw"], "as" => "law."], function () {
-    Route::get('/', function () {
-        return response()->json('Welcome Law');
-    });
+    Route::get('/', [DashboardController::class, 'lawDashboard']);
+    Route::get('/settings', [DashboardSettingController::class, 'create']);
+    Route::put('/settings/{id}', [DashboardSettingController::class, 'update']);
+    Route::apiResource('/reported', ReportedController::class)->only('index');
+    Route::apiResource('/resources', ResourceController::class)->only('index');
 });
 
 Route::group(["prefix" => "government", "middleware" => ["auth:api", "isGovernment"], "as" => "government."], function () {

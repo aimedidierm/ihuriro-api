@@ -30,22 +30,35 @@ class DashboardController extends Controller
 
     public function lawDashboard()
     {
-        // $reported = Reported::get()->count();
-        // $reports = $reported;
-        // $surveys = Survey::get()->count();
-        // $unread = MessageUser::where('is_read', false)
-        //     ->where('user_id', Auth::id())
-        //     ->get()->count();
+        $reported = Reported::get()->count();
+        $reports = $reported;
+        $surveys = Survey::get()->count();
+        $unread = MessageUser::where('is_read', false)
+            ->where('user_id', Auth::id())
+            ->get()->count();
 
-        // return response()->json([
-        //     'reports' => $reports,
-        //     'reported' => $reported,
-        //     'surveys' => $surveys,
-        //     'unread' => $unread,
-        // ], Response::HTTP_OK);
+        return response()->json([
+            'reports' => $reports,
+            'reported' => $reported,
+            'surveys' => $surveys,
+            'unread' => $unread,
+        ], Response::HTTP_OK);
     }
 
     public function userDashboard()
     {
+        $reported = Reported::where('user_id', Auth::id())->get()->count();
+        $reports = $reported;
+        $surveys = Survey::where('user_id', Auth::id())->get()->count();
+        $unread = MessageUser::where('is_read', false)
+            ->where('user_id', Auth::id())
+            ->get()->count();
+
+        return response()->json([
+            'reports' => $reports,
+            'reported' => $reported,
+            'surveys' => $surveys,
+            'unread' => $unread,
+        ], Response::HTTP_OK);
     }
 }

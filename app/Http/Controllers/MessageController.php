@@ -75,7 +75,7 @@ class MessageController extends Controller
             ->where('user_id', $id)
             ->get();
 
-        $allChats = $sendChats->merge($receivedChats)->unique('id')->sortByDesc('created_at')->values();
+        $allChats = $sendChats->merge($receivedChats)->unique('id')->values();
 
         return response()->json([
             'chats' => $allChats

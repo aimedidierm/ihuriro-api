@@ -8,4 +8,15 @@ use Illuminate\Database\Eloquent\Model;
 class MessageUser extends Model
 {
     use HasFactory;
+
+    /**
+     * The attributes that are mass assignable.
+     *
+     * @var array<int, string>
+     */
+    protected $fillable = [
+        'is_read',
+        'user_id',
+        'message_id',
+    ];
 }

@@ -76,8 +76,7 @@ Route::group(["prefix" => "government", "middleware" => ["auth:api", "isGovernme
 });
 
 Route::group(["prefix" => "chat", "middleware" => "auth:api"], function () {
-    //listing unread messages
-    //listing messages in chat room
-    Route::apiResource('/message', MessageController::class)->only('index', 'store');
-    //send message
+    Route::get('/listing', [MessageController::class, 'index']);
+    Route::get('/chat-room/{id}', [MessageController::class, 'chatRoom']);
+    Route::post('/send-message/{id}', [MessageController::class, 'store']);
 });

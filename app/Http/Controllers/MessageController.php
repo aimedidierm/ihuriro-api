@@ -24,6 +24,7 @@ class MessageController extends Controller
             ->groupBy('receiver_id');
 
         $sendChats = Message::whereIn('id', $sendSubquery)
+            ->with('receiver')
             ->with(['messageUser'])
             ->get();
 
@@ -33,6 +34,7 @@ class MessageController extends Controller
 
         $receivedChats = Message::whereIn('id', $receivedSubquery)
             ->with(['user'])
+            ->with(['messageUser'])
             ->get();
 
         // Merge and filter to keep only the latest message when user and message_user are the same person

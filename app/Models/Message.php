@@ -26,6 +26,11 @@ class Message extends Model
         return $this->belongsTo(User::class);
     }
 
+    public function receiver()
+    {
+        return $this->belongsTo(User::class, 'receiver_id');
+    }
+
     public function messageUser()
     {
         return $this->hasOne(MessageUser::class);

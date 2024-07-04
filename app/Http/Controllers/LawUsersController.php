@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Enums\UserRole;
 use App\Http\Requests\LawUsersRequest;
+use App\Models\DashboardSetting;
 use App\Models\User;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -30,6 +31,14 @@ class LawUsersController extends Controller
             'email' => $request->input('email'),
             'role' => UserRole::LAW->value,
             'password' => bcrypt('password')
+        ]);
+
+        DashboardSetting::create([
+            'option_1' => true,
+            'option_2' => true,
+            'option_3' => true,
+            'option_4' => true,
+            'user_id' => $user->id,
         ]);
 
         return response()->json([

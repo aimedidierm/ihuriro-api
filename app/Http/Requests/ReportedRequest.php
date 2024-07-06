@@ -29,7 +29,7 @@ class ReportedRequest extends FormRequest
             "description" => "required|string",
             "location_latitude" => "required|numeric",
             "location_longitude" => "required|numeric",
-            // "image" => "required|image",
+            "image" => "required|image",
             "type" => ["required", "string", Rule::in(array_values((new ReflectionClass(ReportedType::class))->getConstants()))],
         ];
     }

@@ -51,7 +51,8 @@ class ReportedController extends Controller
         $reported = Reported::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'location' => $request->input('location'),
+            'location_latitude' => $request->input('location_latitude'),
+            'location_longitude' => $request->input('location_longitude'),
             'type' => $request->input('type'),
             'status' => ReportedStatus::ACTIVE->value,
             'user_id' => Auth::id(),
@@ -73,12 +74,26 @@ class ReportedController extends Controller
      */
     public function annonymous(ReportedRequest $request)
     {
+        $uniqueid = uniqid();
+        $extension = $request->file('image')->getClientOriginalExtension();
+        $filename = Carbon::now()->format('Ymd') . '_' . $uniqueid . '.' . $extension;
+
+        // Store the file in the 'public' disk, which is linked to 'storage/app/public'
+        $path = $request->file('image')->storeAs('images', $filename, 'public');
+        $fileUrl = Storage::url($path);
+
         $reported = Reported::create([
             'title' => $request->input('title'),
             'description' => $request->input('description'),
-            'location' => $request->input('location'),
+            'location_latitude' => $request->input('location_latitude'),
+            'location_longitude' => $request->input('location_longitude'),
             'type' => $request->input('type'),
             'status' => ReportedStatus::ACTIVE->value,
+        ]);
+
+        ReportedDocuments::create([
+            'document' => $fileUrl,
+            'reported_id' => $reported->id,
         ]);
 
         return response()->json([

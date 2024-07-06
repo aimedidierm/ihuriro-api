@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('title');
             $table->text('description');
-            $table->string('location');
+            $table->float('location_latitude');
+            $table->float('location_longitude');
             $table->string('type');
             $table->string('status');
             $table->unsignedBigInteger("user_id")->nullable();

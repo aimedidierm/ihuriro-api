@@ -17,7 +17,8 @@ class Reported extends Model
     protected $fillable = [
         'title',
         'description',
-        'location',
+        'location_latitude',
+        'location_longitude',
         'type',
         'status',
         'user_id',
